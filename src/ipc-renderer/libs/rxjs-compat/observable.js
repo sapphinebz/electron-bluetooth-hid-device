@@ -3,6 +3,7 @@ export class Observable {
   #project;
   subscriptions = new Subscription();
   closed = false;
+  completed = false;
   constructor(project) {
     this.#project = project;
   }
@@ -36,15 +37,28 @@ export class Observable {
     return opts.reduce((observable, operator) => operator(observable), this);
   }
 
-  #mergeSafeSubscriber(source, target) {
-    return { ...source, ...target };
+  #mergeSafeSubscriber(safeSubscriber, target) {
+    return {
+      next: target.next ?? safeSubscriber.next,
+      error: target.error ?? safeSubscriber.error,
+      complete: target.complete
+        ? () => {
+            safeSubscriber.complete();
+            target.complete();
+          }
+        : safeSubscriber.complete,
+      add: safeSubscriber.add.bind(safeSubscriber),
+    };
   }
 
   #createSafeSubscriber() {
     return {
       next: () => {},
       error: () => {},
-      complete: () => {},
+      complete: () => {
+        this.completed = true;
+        this.subscriptions.unsubscribe();
+      },
       add: this.subscriptions.add.bind(this.subscriptions),
     };
   }
