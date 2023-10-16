@@ -21,10 +21,7 @@ export class Observable {
     }
 
     return new Subscription(() => {
-      if (!this.closed) {
-        this.subscriptions.unsubscribe();
-        this.closed = true;
-      }
+      this.closeObservable();
     });
   }
 
@@ -61,5 +58,12 @@ export class Observable {
       },
       add: this.subscriptions.add.bind(this.subscriptions),
     };
+  }
+
+  closeObservable() {
+    if (!this.closed) {
+      this.subscriptions.unsubscribe();
+      this.closed = true;
+    }
   }
 }
