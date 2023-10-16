@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Electron Device Access</title>
+  </head>
+  <body>
+    <ul>
+      <li>
+        <a href="/hid" aria-label="routerLink">HID Device</a>
+      </li>
+      <li>
+        <a href="/bluetooth" aria-label="routerLink">Bluetooth Device</a>
+      </li>
+    </ul>
+
+    <main></main>
+
+    <script type="module" src="./renderer.js"></script>
+  </body>
+</html>
