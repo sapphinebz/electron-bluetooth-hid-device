@@ -27,6 +27,15 @@ export class Observable {
     });
   }
 
+  /**
+   *
+   * @param  {...Function} opts
+   * @returns Observable
+   */
+  pipe(...opts) {
+    return opts.reduce((observable, operator) => operator(observable), this);
+  }
+
   #mergeSafeSubscriber(source, target) {
     return { ...source, ...target };
   }
